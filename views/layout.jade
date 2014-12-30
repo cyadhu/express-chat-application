@@ -1,0 +1,64 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/socket.io/socket.io.js')
+    script(src='http://code.jquery.com/jquery-latest.min.js')
+    script(src='http://code.jquery.com/ui/1.9.1/jquery-ui.js')
+    script.
+     $(function(){
+     $("#BTN_I").click(function(){
+       var name = $('#NAME_I').val();
+       name = $.trim(name);
+       if(!name)
+       {
+         $('#NAME_I').css('border','solid rgb(213, 20, 20)');
+          $('#NAME_I').effect('shake');
+       }
+       else
+       {
+         $.post('/chat',{user:name},function(data){
+            window.location='/start';
+         });
+         
+       }
+     });
+     var socket = io();
+     $("form").submit(function(){
+        var msg = $("#Chat_m").val();
+        msg = $.trim(msg);
+        if(!msg)
+        {
+          $('#Chat_m').css('border','solid rgb(213, 20, 20)');
+          return false;
+        }
+        $('#Chat_m').css('border','solid black');
+        $("#message").animate({ scrollTop: $(document).height() }, "slow");
+        var user = $("#Session").val();
+        socket.emit('sent',{msg:msg,user:user});
+        $("#Chat_m").val('');
+        return false;
+     });
+     socket.on('sentback',function(msg){
+     console.log('got it');
+        $('#message').append('<li><b>'+msg.user+'</b> : '+msg.msg+'</li>');
+     });
+     $(".chat_msg").keyup(function(){
+        var name = $('#Session').val();
+        if(name){
+         socket.emit('typing',{user:name});
+        }
+     });
+     socket.on('typingmsg',function(msg){
+      $('#status').html(msg.user+' is typing....');
+        setTimeout(function () {
+        $("#status").html('');
+        }, 2000);
+     });
+     
+
+     });
+  body
+   #outer
+    block content

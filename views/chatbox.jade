@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  div(class='post' id='welcome')  
+   h2 Welcome #{user}
+   div(class='detail' style='padding-left:200px !important')
+    input(type='button' name='group' value='GROUP CHAT' class='btn' style='width:auto !important' onclick='javascript:window.location="/group-chat"')
+    input(type='button' name='client' value='PRIVATE CHAT' class='btn' style='width:auto !important' onclick='javascript:window.location="/private-chat"')

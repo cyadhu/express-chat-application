@@ -1,0 +1,13 @@
+extends layout
+
+block content
+ #chattag
+   #date
+     p #{moment(Date.now()).format('MM/DD/YYYY')}
+   ul(id='message')
+   #status
+   form(action='#' id="chatform")
+    input(type='text' name='msg' class="chat_msg" id="Chat_m")
+    input(type="submit" name="chat_sub" value="send" class="chat" onclick="send()")
+    input(type="hidden" name="sess" value="#{user}" id="Session")
+ 
